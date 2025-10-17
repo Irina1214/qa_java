@@ -30,32 +30,41 @@ class CatTest {
 
     @Test
     @DisplayName("Проверка, что getSound возвращает 'Мяу'")
-    void getSound_shouldReturnMeow() {
+    void getSoundShouldReturnMeow() {
         assertEquals(MEOW, cat.getSound());
     }
 
     @Test
-    @DisplayName("getSound всегда возвращает одинаковое значение")
-    void getSound_shouldAlwaysReturnSameValue() {
+    @DisplayName("Проверка, что getSound всегда возвращает одинаковое значение")
+    void getSoundShouldAlwaysReturnSameValue() {
         assertEquals(MEOW, cat.getSound());
-        assertEquals(MEOW, cat.getSound()); // Многократный вызов
+        assertEquals(MEOW, cat.getSound());
         assertEquals(MEOW, cat.getSound());
     }
 
     @Test
-    @DisplayName("Проверка, что getFood возвращает список еды через зависимость Predator")
-    void getFood_shouldReturnMeatList() throws Exception {
+    @DisplayName("Проверка, что getFood возвращает корректный список еды")
+    void getFoodShouldReturnCorrectFoodList() throws Exception {
         when(feline.eatMeat()).thenReturn(EXPECTED_FOOD);
 
         List<String> actualFood = cat.getFood();
 
         assertEquals(EXPECTED_FOOD, actualFood);
+    }
+
+    @Test
+    @DisplayName("Проверка, что getFood вызывает метод eatMeat у зависимости Predator")
+    void getFoodShouldCallEatMeatMethod() throws Exception {
+        when(feline.eatMeat()).thenReturn(EXPECTED_FOOD);
+
+        cat.getFood();
+
         verify(feline).eatMeat();
     }
 
     @Test
     @DisplayName("Проверка, что getFood возвращает пустой список когда feline возвращает пустой список")
-    void getFood_whenFelineReturnsEmptyList_shouldReturnEmptyList() throws Exception {
+    void getFoodWhenFelineReturnsEmptyListShouldReturnEmptyList() throws Exception {
         when(feline.eatMeat()).thenReturn(List.of());
 
         List<String> actualFood = cat.getFood();
